@@ -1,0 +1,20 @@
+# STS / Eclipse
+.metadata/
+.project
+.classpath
+.settings/
+bin/
+
+# Java
+target/
+*.class
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# OS
+Thumbs.db
+.DS_Store
