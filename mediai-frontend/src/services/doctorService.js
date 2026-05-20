@@ -48,3 +48,10 @@ export const getDoctorsPagination = async (page, size) => {
 
   return response.data;
 };
+
+// Public Doctors
+export const getPublicDoctors = async () => {
+  const response = await axiosInstance.get("/api/public/doctors");
+
+  return response.data;
+};

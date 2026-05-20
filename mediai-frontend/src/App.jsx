@@ -10,6 +10,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import DoctorsPage from "./pages/admin/DoctorsPage";
+import AppointmentsPage from "./pages/patient/AppointmentsPage";
 const App = () => {
   return (
     <Routes>
@@ -53,6 +54,8 @@ const App = () => {
         }
       >
         <Route path="dashboard" element={<PatientDashboard />} />
+
+        <Route path="appointments" element={<AppointmentsPage />} />
       </Route>
     </Routes>
   );
