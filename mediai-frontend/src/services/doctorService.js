@@ -30,3 +30,21 @@ export const updateDoctor = async (id, doctorData) => {
 
   return response.data;
 };
+
+// Search Doctors
+export const searchDoctors = async (specialization) => {
+  const response = await axiosInstance.get(
+    `/api/admin/doctors/search?specialization=${specialization}`,
+  );
+
+  return response.data;
+};
+
+// Pagination Doctors
+export const getDoctorsPagination = async (page, size) => {
+  const response = await axiosInstance.get(
+    `/api/admin/doctors/pagination?page=${page}&size=${size}`,
+  );
+
+  return response.data;
+};

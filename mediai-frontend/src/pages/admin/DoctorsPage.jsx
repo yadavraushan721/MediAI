@@ -5,6 +5,8 @@ import {
   deleteDoctor,
   addDoctor,
   updateDoctor,
+  searchDoctors,
+  getDoctorsPagination,
 } from "../../services/doctorService";
 
 const DoctorsPage = () => {
@@ -17,6 +19,12 @@ const DoctorsPage = () => {
   const [editMode, setEditMode] = useState(false);
 
   const [selectedDoctorId, setSelectedDoctorId] = useState(null);
+
+  const [searchText, setSearchText] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const [totalPages, setTotalPages] = useState(0);
 
   const [doctorData, setDoctorData] = useState({
     fullName: "",
@@ -38,11 +46,15 @@ const DoctorsPage = () => {
     fetchDoctors();
   }, []);
 
-  const fetchDoctors = async () => {
+  const fetchDoctors = async (page = 0) => {
     try {
-      const data = await getAllDoctors();
+      const data = await getDoctorsPagination(page, 5);
 
-      setDoctors(data);
+      setDoctors(data.content);
+
+      setTotalPages(data.totalPages);
+
+      setCurrentPage(page);
     } catch (error) {
       console.error(error);
     } finally {
@@ -167,28 +179,58 @@ const DoctorsPage = () => {
 
     setShowModal(true);
   };
+  const handleSearch = async () => {
+    if (!searchText.trim()) {
+      fetchDoctors();
 
+      return;
+    }
+
+    try {
+      const data = await searchDoctors(searchText);
+
+      setDoctors(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   if (loading) {
     return <div className="text-2xl font-semibold">Loading Doctors...</div>;
   }
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold">Doctors Management</h1>
 
-        <button
-          onClick={() => {
-            resetForm();
+        <div className="flex gap-3">
+          <input
+            type="text"
+            placeholder="Search Specialization"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="border px-4 py-2 rounded-lg"
+          />
 
-            setShowModal(true);
-          }}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg"
-        >
-          Add Doctor
-        </button>
+          <button
+            onClick={handleSearch}
+            className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg"
+          >
+            Search
+          </button>
+
+          <button
+            onClick={() => {
+              resetForm();
+
+              setShowModal(true);
+            }}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg"
+          >
+            Add Doctor
+          </button>
+        </div>
       </div>
-
       <div className="bg-white rounded-2xl shadow overflow-x-auto">
         {/* table data */}
         <table className="w-full">
@@ -248,7 +290,28 @@ const DoctorsPage = () => {
           </tbody>
         </table>
       </div>
+      // Pagination Controls
+      <div className="flex justify-center items-center gap-4 p-5">
+        <button
+          disabled={currentPage === 0}
+          onClick={() => fetchDoctors(currentPage - 1)}
+          className="bg-gray-700 text-white px-4 py-2 rounded disabled:bg-gray-400"
+        >
+          Previous
+        </button>
 
+        <span className="font-semibold">
+          Page {currentPage + 1} of {totalPages}
+        </span>
+
+        <button
+          disabled={currentPage + 1 === totalPages}
+          onClick={() => fetchDoctors(currentPage + 1)}
+          className="bg-gray-700 text-white px-4 py-2 rounded disabled:bg-gray-400"
+        >
+          Next
+        </button>
+      </div>
       {/* Add Doctor Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
