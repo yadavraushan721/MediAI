@@ -4,29 +4,36 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 
 const LoginPage = () => {
+  //It helps move user from one page to another.
+  // In this case, after a successful login, we want to navigate the user to their respective dashboard based on their role (admin, doctor, or patient). The useNavigate hook provides us with a navigate function that we can call to change the route programmatically.
   const navigate = useNavigate();
 
+  //useState helps React store data dynamically. It allows us to create a state variable (formData) and a function (setFormData) to update that variable. This way, we can keep track of the user's input in the login form and update it as they type.
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  // Function runs when user types in input.
+  // It updates the formData state with the new values from the input fields.
   const handleChange = (e) => {
     setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+      ...formData, // Spread operator copies old values without previous values disappear
+      [e.target.name]: e.target.value, //This updates specific input field.
     });
   };
 
+  /* Runs when form submits
+  Why async ? :Because API calls take time.*/
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // This stops reload.
 
     try {
-      const response = await loginUser(formData);
+      const response = await loginUser(formData); // api call to backend with form data. It returns response which contains token, role, and email.
 
       //   localStorage.setItem("token", response);
 
-      localStorage.setItem("token", response.token);
+      localStorage.setItem("token", response.token); // Saves JWT token in browser storage for later use in authenticated API requests.
 
       localStorage.setItem("role", response.role);
 
@@ -36,7 +43,13 @@ const LoginPage = () => {
 
       alert("Login Successful");
 
-      navigate("/admin/dashboard");
+      if (response.role === "ADMIN") {
+        navigate("/admin/dashboard"); // Navigates to admin dashboard if user is an admin.
+      } else if (response.role === "DOCTOR") {
+        navigate("/doctor/dashboard"); // Navigates to doctor dashboard if user is a doctor.
+      } else if (response.role === "PATIENT") {
+        navigate("/patient/dashboard"); // Navigates to patient dashboard if user is a patient.
+      }
     } catch (error) {
       console.error(error);
 

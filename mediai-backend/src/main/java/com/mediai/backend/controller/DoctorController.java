@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/doctor")
 public class DoctorController {
 
-    @GetMapping("/dashboard")
-    public String doctorDashboard() {
-        return "Welcome Doctor";
-    }
+	@GetMapping("/dashboard")
+	public String doctorDashboard() {
+		return "Welcome Doctor";
+	}
 }

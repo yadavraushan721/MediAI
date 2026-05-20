@@ -19,20 +19,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MedicalRecordController {
 
-    private final MedicalRecordService medicalRecordService;
+	private final MedicalRecordService medicalRecordService;
 
-    @PostMapping
-    public String createMedicalRecord(
-            @RequestBody MedicalRecordRequest request) {
+	@PostMapping
+	public String createMedicalRecord(@RequestBody MedicalRecordRequest request) {
 
-        return medicalRecordService
-                .createMedicalRecord(request);
-    }
+		return medicalRecordService.createMedicalRecord(request);
+	}
 
-    @GetMapping
-    public List<MedicalRecord> getRecords() {
+	@GetMapping
+	public List<MedicalRecord> getRecords() {
 
-        return medicalRecordService
-                .getAllRecords();
-    }
+		return medicalRecordService.getAllRecords();
+	}
 }

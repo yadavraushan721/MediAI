@@ -8,6 +8,8 @@ import PatientDashboard from "./pages/patient/PatientDashboard";
 
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
+
+import DoctorsPage from "./pages/admin/DoctorsPage";
 const App = () => {
   return (
     <Routes>
@@ -19,19 +21,21 @@ const App = () => {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRole="ADMIN">
             <DashboardLayout />
           </ProtectedRoute>
         }
       >
         <Route path="dashboard" element={<AdminDashboard />} />
+
+        <Route path="doctors" element={<DoctorsPage />} />
       </Route>
 
       {/* Doctor Routes */}
       <Route
         path="/doctor"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRole="DOCTOR">
             <DashboardLayout />
           </ProtectedRoute>
         }
@@ -43,7 +47,7 @@ const App = () => {
       <Route
         path="/patient"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRole="PATIENT">
             <DashboardLayout />
           </ProtectedRoute>
         }

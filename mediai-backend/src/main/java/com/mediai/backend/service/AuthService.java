@@ -3,11 +3,11 @@ package com.mediai.backend.service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mediai.backend.dto.AuthResponse;
+import com.mediai.backend.dto.LoginRequest;
 import com.mediai.backend.dto.RegisterRequest;
 import com.mediai.backend.entity.User;
 import com.mediai.backend.repository.UserRepository;
-
-import com.mediai.backend.dto.LoginRequest;
 import com.mediai.backend.security.JwtService;
 
 import lombok.RequiredArgsConstructor;
@@ -73,7 +73,7 @@ public class AuthService {
 		return "User registered successfully";
 	}
 	
-	public String login(LoginRequest request) {
+	public AuthResponse login(LoginRequest request) {
 
 	    User user = userRepository.findByEmail(request.getEmail())
 	            .orElseThrow(() -> new RuntimeException("User not found"));
@@ -82,6 +82,12 @@ public class AuthService {
 	        throw new RuntimeException("Invalid password");
 	    }
 
-	    return jwtService.generateToken(user.getEmail());
+	    String token = jwtService.generateToken(user.getEmail());
+
+	    return new AuthResponse(
+	            token,
+	            user.getRole().name(),
+	            user.getEmail()
+	    );
 	}
 }
