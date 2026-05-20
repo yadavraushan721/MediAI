@@ -23,11 +23,11 @@ public class AppointmentController {
 
 	private final AppointmentService appointmentService;
 
-	@PostMapping
-	public String bookAppointment(@RequestBody AppointmentRequest request) {
-
-		return appointmentService.bookAppointment(request);
-	}
+//	@PostMapping
+//	public String bookAppointment(@RequestBody AppointmentRequest request) {
+//
+//		return appointmentService.bookAppointment(request);
+//	}
 
 	@GetMapping
 	public List<Appointment> getAppointments() {
@@ -35,9 +35,16 @@ public class AppointmentController {
 		return appointmentService.getAllAppointments();
 	}
 
+	@PutMapping("/complete/{id}")
+	public String completeAppointment(@PathVariable Long id) {
+
+		return appointmentService.completeAppointment(id);
+	}
+
 	@PutMapping("/cancel/{id}")
 	public String cancelAppointment(@PathVariable Long id) {
 
 		return appointmentService.cancelAppointment(id);
 	}
+
 }

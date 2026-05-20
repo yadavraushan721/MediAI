@@ -71,7 +71,7 @@ public class SecurityConfig {
 
 				.authorizeHttpRequests(auth -> auth
 
-						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/api/auth/**").permitAll().requestMatchers("/api/public/**").permitAll()
 
 						.requestMatchers("/api/admin/**").hasAuthority("ADMIN")
 
@@ -85,21 +85,19 @@ public class SecurityConfig {
 
 		return http.build();
 	}
-	
+
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 
-	    return new WebMvcConfigurer() {
+		return new WebMvcConfigurer() {
 
-	        @Override
-	        public void addCorsMappings(CorsRegistry registry) {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
 
-	            registry.addMapping("/**")
-	                    .allowedOrigins("http://localhost:5173")
-	                    .allowedMethods("*")
-	                    .allowedHeaders("*");
-	        }
-	    };
+				registry.addMapping("/**").allowedOrigins("http://localhost:5173").allowedMethods("*")
+						.allowedHeaders("*");
+			}
+		};
 	}
 
 }
