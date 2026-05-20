@@ -11,6 +11,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 
 import DoctorsPage from "./pages/admin/DoctorsPage";
 import AppointmentsPage from "./pages/patient/AppointmentsPage";
+import DoctorAppointmentsPage from "./pages/doctor/DoctorAppointmentsPage";
 const App = () => {
   return (
     <Routes>
@@ -42,6 +43,7 @@ const App = () => {
         }
       >
         <Route path="dashboard" element={<DoctorDashboard />} />
+        <Route path="appointments" element={<DoctorAppointmentsPage />} />
       </Route>
 
       {/* Patient Routes */}
