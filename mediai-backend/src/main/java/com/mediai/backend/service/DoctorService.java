@@ -70,7 +70,7 @@ public class DoctorService {
 
 	public List<Doctor> searchBySpecialization(String specialization) {
 
-		return doctorRepository.findBySpecialization(specialization);
+		return doctorRepository.findBySpecializationContainingIgnoreCase(specialization);
 	}
 
 	public Page<Doctor> getDoctorsWithPagination(int page, int size) {
