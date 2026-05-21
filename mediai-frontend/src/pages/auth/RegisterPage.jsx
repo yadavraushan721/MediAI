@@ -6,7 +6,7 @@ const RegisterPage = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
     role: "PATIENT",
@@ -43,9 +43,9 @@ const RegisterPage = () => {
         <form onSubmit={handleRegister}>
           <input
             type="text"
-            name="name"
-            placeholder="Enter Name"
-            value={formData.name}
+            name="fullName"
+            placeholder="Enter Full Name"
+            value={formData.fullName}
             onChange={handleChange}
             className="w-full border p-3 rounded mb-4"
             required
