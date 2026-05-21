@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getAllAppointmentsForAdmin } from "../../services/patientService";
+import { getAllAppointmentsForAdmin } from "../../services/appointmentService";
 
 const PatientsPage = () => {
   const [patients, setPatients] = useState([]);
