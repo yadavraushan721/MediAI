@@ -2,13 +2,7 @@ package com.mediai.backend.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mediai.backend.dto.AppointmentRequest;
 import com.mediai.backend.entity.Appointment;
@@ -21,40 +15,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AppointmentController {
 
-	private final AppointmentService appointmentService;
+    private final AppointmentService appointmentService;
 
     // Patient Book Appointment
-	@PostMapping("/patient/appointments")
-	public String bookAppointment(@RequestBody AppointmentRequest request) {
+    @PostMapping("/patient/appointments")
+    public String bookAppointment(
+            @RequestBody AppointmentRequest request) {
 
-		return appointmentService.bookAppointment(request);
-	}
-	
-	// Get All Appointments
-	@GetMapping("/patient/appointments")
-	public List<Appointment> getAppointments() {
+        return appointmentService.bookAppointment(request);
+    }
 
-		return appointmentService.getAllAppointments();
-	}
-	
-	// Doctor Confirm Appointment
-	@PutMapping("/doctor/appointments/confirm/{id}")
-	public String completeAppointment(@PathVariable Long id) {
+    // Patient Get Appointments
+    @GetMapping("/patient/appointments")
+    public List<Appointment> getAppointments() {
 
-		return appointmentService.completeAppointment(id);
-	}
+        return appointmentService.getAllAppointments();
+    }
 
-	// Patient Cancel Appointment
-	@PutMapping("/patient/appointments/cancel/{id}")
-	public String cancelAppointment(@PathVariable Long id) {
+    // Patient Cancel Appointment
+    @PutMapping("/patient/appointments/cancel/{id}")
+    public String cancelAppointment(
+            @PathVariable Long id) {
 
-		return appointmentService.cancelAppointment(id);
-	}
-
-	// Doctor Complete Appointment
-	@PutMapping("/doctor/appointments/complete/{id}")
-	public String confirmAppointment(@PathVariable Long id) {
-
-		return appointmentService.confirmAppointment(id);
-	}
+        return appointmentService.cancelAppointment(id);
+    }
 }
