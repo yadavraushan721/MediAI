@@ -67,12 +67,13 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.cors(cors -> {
-		})
+		http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-				.csrf(csrf -> csrf.disable())
+	    .csrf(csrf -> csrf.disable())
 
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	    .sessionManagement(session ->
+	        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	    )
 
 				.authorizeHttpRequests(auth -> auth
 
@@ -91,19 +92,7 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-//	@Bean
-//	public WebMvcConfigurer corsConfigurer() {
-//
-//		return new WebMvcConfigurer() {
-//
-//			@Override
-//			public void addCorsMappings(CorsRegistry registry) {
-//
-//				registry.addMapping("/**").allowedOrigins("http://localhost:5173").allowedMethods("*")
-//						.allowedHeaders("*");
-//			}
-//		};
-//	}
+
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 
