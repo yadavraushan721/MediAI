@@ -179,6 +179,7 @@ const DoctorsPage = () => {
 
     setShowModal(true);
   };
+
   const handleSearch = async () => {
     if (!searchText.trim()) {
       fetchDoctors();
@@ -194,6 +195,7 @@ const DoctorsPage = () => {
       console.error(error);
     }
   };
+  
   if (loading) {
     return <div className="text-2xl font-semibold">Loading Doctors...</div>;
   }
@@ -290,7 +292,7 @@ const DoctorsPage = () => {
           </tbody>
         </table>
       </div>
-      // Pagination Controls
+
       <div className="flex justify-center items-center gap-4 p-5">
         <button
           disabled={currentPage === 0}

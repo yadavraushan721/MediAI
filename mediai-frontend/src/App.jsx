@@ -18,14 +18,15 @@ import DoctorAppointmentsPage from "./pages/doctor/DoctorAppointmentsPage";
 import MedicalRecordsPage from "./pages/doctor/MedicalRecordsPage";
 
 import PatientMedicalHistoryPage from "./pages/patient/PatientMedicalHistoryPage";
+
+import PatientsPage from "./pages/admin/PatientsPage";
+
+import AdminAppointmentsPage from "./pages/admin/AdminAppointmentsPage";
+
 const App = () => {
   return (
     <Routes>
       {/* Auth Routes */}
-      <Route path="/" element={<HomePage />} />{" "}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      {/* Admin Routes */}
       <Route
         path="/admin"
         element={
@@ -37,7 +38,12 @@ const App = () => {
         <Route path="dashboard" element={<AdminDashboard />} />
 
         <Route path="doctors" element={<DoctorsPage />} />
+
+        <Route path="patients" element={<PatientsPage />} />
+
+        <Route path="appointments" element={<AdminAppointmentsPage />} />
       </Route>
+
       {/* Doctor Routes */}
       <Route
         path="/doctor"
@@ -51,6 +57,7 @@ const App = () => {
         <Route path="appointments" element={<DoctorAppointmentsPage />} />
         <Route path="medical-records" element={<MedicalRecordsPage />} />
       </Route>
+
       {/* Patient Routes */}
       <Route
         path="/patient"
