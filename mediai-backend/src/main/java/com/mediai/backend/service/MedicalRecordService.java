@@ -17,24 +17,24 @@ import com.mediai.backend.repository.MedicalRecordRepository;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Service class responsible for managing medical records
- * and prescription-related operations.
+ * Service class responsible for managing medical records and
+ * prescription-related operations.
  *
  * <p>
  * This service handles:
  * </p>
  *
  * <ul>
- *     <li>Creating medical records for appointments.</li>
- *     <li>Validating appointment existence.</li>
- *     <li>Converting prescription request DTOs into entities.</li>
- *     <li>Saving medical records and prescriptions into the database.</li>
- *     <li>Fetching all medical records.</li>
+ * <li>Creating medical records for appointments.</li>
+ * <li>Validating appointment existence.</li>
+ * <li>Converting prescription request DTOs into entities.</li>
+ * <li>Saving medical records and prescriptions into the database.</li>
+ * <li>Fetching all medical records.</li>
  * </ul>
  *
  * <p>
- * It acts as the business logic layer between controllers
- * and repository/database operations.
+ * It acts as the business logic layer between controllers and
+ * repository/database operations.
  * </p>
  */
 
@@ -42,113 +42,127 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MedicalRecordService {
 
-    private final MedicalRecordRepository medicalRecordRepository;
+	private final MedicalRecordRepository medicalRecordRepository;
 
-    private final AppointmentRepository appointmentRepository;
+	private final AppointmentRepository appointmentRepository;
 
-    /**
-     * Creates and stores a new medical record for a patient appointment.
-     *
-     * <p>
-     * This method performs the following operations:
-     * </p>
-     *
-     * <ul>
-     *     <li>Validates whether the appointment exists.</li>
-     *     <li>Converts prescription request DTOs into Prescription entities.
-     *     //map(this::mapToPrescription)
-     *     for(PrescriptionRequest p : requests){
-     *			mapToPrescription(p);
-	 *		}
-     *     </li>
-     *     <li>Builds a MedicalRecord entity using the Builder Pattern.</li>
-     *     <li>Associates prescriptions and appointment with the medical record.</li>
-     *     <li>Saves the medical record into the database.</li>
-     * </ul>
-     *
-     * @param request contains medical record details such as symptoms,
-     *                diagnosis, treatment notes, appointment ID,
-     *                and prescription details.
-     *
-     * @return success message after successful medical record creation.
-     *
-     * @throws ResourceNotFoundException if the appointment does not exist.
-     */
-    public String createMedicalRecord(MedicalRecordRequest request) {
-
-        Appointment appointment =
-                appointmentRepository
-                .findById(request.getAppointmentId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Appointment not found"));
-
-        List<Prescription> prescriptions =
-                request.getPrescriptions()
-                .stream()
-                .map(this::mapToPrescription)
-                .collect(Collectors.toList());
-
-        MedicalRecord medicalRecord =
-                MedicalRecord.builder()
-                .symptoms(request.getSymptoms())
-                .diagnosis(request.getDiagnosis())
-                .treatmentNotes(request.getTreatmentNotes())
-                .appointment(appointment)
-                .prescriptions(prescriptions)
-                .build();
-
-        medicalRecordRepository.save(medicalRecord);
-
-        return "Medical record created successfully";
-    }
-
-    /**
-     * Converts a PrescriptionRequest DTO into a Prescription entity.
-     *
-     * <p>
-     * This helper method maps prescription-related request data
-     * such as medicine name, dosage, and instructions
-     * into a Prescription entity object.
-     * </p>
-     * 
-     * private Prescription mapToPrescription(PrescriptionRequest request) {
-     *
-     *Prescription prescription = new Prescription();
+	/**
+	 * Creates and stores a new medical record for a patient appointment.
 	 *
-     *prescription.setMedicineName(request.getMedicineName());
-     *prescription.setDosage(request.getDosage());
-     *prescription.setInstructions(request.getInstructions());
+	 * <p>
+	 * This method performs the following operations:
+	 * </p>
 	 *
-     *return prescription;
-	 *}
-     *
-     * @param request contains prescription details received from the client.
-     *
-     * @return mapped Prescription entity object.
-     */
-    private Prescription mapToPrescription(PrescriptionRequest request) {
+	 * <ul>
+	 * <li>Validates whether the appointment exists.</li>
+	 * <li>Converts prescription request DTOs into Prescription entities.
+	 * //map(this::mapToPrescription) for(PrescriptionRequest p : requests){
+	 * mapToPrescription(p); }</li>
+	 * <li>Builds a MedicalRecord entity using the Builder Pattern.</li>
+	 * <li>Associates prescriptions and appointment with the medical record.</li>
+	 * <li>Saves the medical record into the database.</li>
+	 * </ul>
+	 *
+	 * @param request contains medical record details such as symptoms, diagnosis,
+	 *                treatment notes, appointment ID, and prescription details.
+	 *
+	 * @return success message after successful medical record creation.
+	 *
+	 * @throws ResourceNotFoundException if the appointment does not exist.
+	 */
+	public String createMedicalRecord(MedicalRecordRequest request) {
 
-    	Prescription prescription= Prescription.builder()
-                .medicineName(request.getMedicineName())
-                .dosage(request.getDosage())
-                .instructions(request.getInstructions())
-                .build();
-    	return prescription;
-    }
+		Appointment appointment = appointmentRepository.findById(request.getAppointmentId())
+				.orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
 
-    /**
-     * Retrieves all medical records from the database.
-     *
-     * <p>
-     * This method fetches and returns all stored medical records
-     * including their associated appointment and prescription data.
-     * </p>
-     *
-     * @return list of all medical records.
-     */
-    public List<MedicalRecord> getAllRecords() {
+		List<Prescription> prescriptions = request.getPrescriptions().stream().map(this::mapToPrescription)
+				.collect(Collectors.toList());
 
-        return medicalRecordRepository.findAll();
-    }
+		MedicalRecord medicalRecord = MedicalRecord.builder().symptoms(request.getSymptoms())
+				.diagnosis(request.getDiagnosis()).treatmentNotes(request.getTreatmentNotes()).appointment(appointment)
+				.prescriptions(prescriptions).build();
+		if (medicalRecordRepository.existsByAppointment(appointment)) {
+
+			throw new IllegalStateException("Medical record already exists for this appointment");
+		}
+		medicalRecordRepository.save(medicalRecord);
+
+		return "Medical record created successfully";
+	}
+
+	/**
+	 * Converts a PrescriptionRequest DTO into a Prescription entity.
+	 *
+	 * <p>
+	 * This helper method maps prescription-related request data such as medicine
+	 * name, dosage, and instructions into a Prescription entity object.
+	 * </p>
+	 * 
+	 * private Prescription mapToPrescription(PrescriptionRequest request) {
+	 *
+	 * Prescription prescription = new Prescription();
+	 *
+	 * prescription.setMedicineName(request.getMedicineName());
+	 * prescription.setDosage(request.getDosage());
+	 * prescription.setInstructions(request.getInstructions());
+	 *
+	 * return prescription; }
+	 *
+	 * @param request contains prescription details received from the client.
+	 *
+	 * @return mapped Prescription entity object.
+	 */
+	private Prescription mapToPrescription(PrescriptionRequest request) {
+
+		Prescription prescription = Prescription.builder().medicineName(request.getMedicineName())
+				.dosage(request.getDosage()).instructions(request.getInstructions()).build();
+		return prescription;
+	}
+
+	/**
+	 * Retrieves all medical records from the database.
+	 *
+	 * <p>
+	 * This method fetches and returns all stored medical records including their
+	 * associated appointment and prescription data.
+	 * </p>
+	 *
+	 * @return list of all medical records.
+	 */
+	public List<MedicalRecord> getAllRecords() {
+
+		return medicalRecordRepository.findAll();
+	}
+
+	public String updateMedicalRecord(Long id, MedicalRecordRequest request) {
+
+		MedicalRecord medicalRecord = medicalRecordRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Medical record not found"));
+
+		List<Prescription> prescriptions =
+
+				request.getPrescriptions().stream().map(this::mapToPrescription).collect(Collectors.toList());
+
+		medicalRecord.setSymptoms(request.getSymptoms());
+
+		medicalRecord.setDiagnosis(request.getDiagnosis());
+
+		medicalRecord.setTreatmentNotes(request.getTreatmentNotes());
+
+		medicalRecord.setPrescriptions(prescriptions);
+
+		medicalRecordRepository.save(medicalRecord);
+
+		return "Medical record updated successfully";
+	}
+
+	public String deleteMedicalRecord(Long id) {
+
+		MedicalRecord medicalRecord = medicalRecordRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Medical record not found"));
+
+		medicalRecordRepository.delete(medicalRecord);
+
+		return "Medical record deleted successfully";
+	}
 }
