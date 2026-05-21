@@ -36,6 +36,12 @@ public class MedicalRecordController {
 		return medicalRecordService.getAllRecords();
 	}
 
+	@GetMapping("/patient-history")
+	public List<MedicalRecord> getPatientMedicalHistory() {
+
+		return medicalRecordService.getAllRecords();
+	}
+
 	@PutMapping("/{id}")
 	public String updateMedicalRecord(@PathVariable Long id, @RequestBody MedicalRecordRequest request) {
 

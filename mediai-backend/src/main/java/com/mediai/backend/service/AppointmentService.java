@@ -65,4 +65,17 @@ public class AppointmentService {
 		return "Appointment completed successfully";
 	}
 
+	public String confirmAppointment(Long id) {
+
+		Appointment appointment = appointmentRepository.findById(id)
+
+				.orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
+
+		appointment.setStatus(AppointmentStatus.CONFIRMED);
+
+		appointmentRepository.save(appointment);
+
+		return "Appointment confirmed successfully";
+	}
+
 }

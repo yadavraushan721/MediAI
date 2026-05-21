@@ -14,6 +14,8 @@ import AppointmentsPage from "./pages/patient/AppointmentsPage";
 import DoctorAppointmentsPage from "./pages/doctor/DoctorAppointmentsPage";
 
 import MedicalRecordsPage from "./pages/doctor/MedicalRecordsPage";
+
+import PatientMedicalHistoryPage from "./pages/patient/PatientMedicalHistoryPage";
 const App = () => {
   return (
     <Routes>
@@ -61,6 +63,8 @@ const App = () => {
         <Route path="dashboard" element={<PatientDashboard />} />
 
         <Route path="appointments" element={<AppointmentsPage />} />
+
+        <Route path="medical-history" element={<PatientMedicalHistoryPage />} />
       </Route>
     </Routes>
   );

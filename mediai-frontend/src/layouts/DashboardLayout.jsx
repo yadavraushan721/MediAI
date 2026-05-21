@@ -5,7 +5,7 @@ import {
   FaUsers,
   FaCalendarCheck,
   FaTachometerAlt,
-  FaNotesMedical,   
+  FaNotesMedical,
 } from "react-icons/fa";
 
 const DashboardLayout = () => {
@@ -76,6 +76,11 @@ const DashboardLayout = () => {
         name: "Appointments",
         path: "/patient/appointments",
         icon: <FaCalendarCheck />,
+      },
+      {
+        name: "Medical History",
+        path: "/patient/medical-history",
+        icon: <FaNotesMedical />,
       },
     ],
   };

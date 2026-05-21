@@ -23,11 +23,11 @@ public class AppointmentController {
 
 	private final AppointmentService appointmentService;
 
-//	@PostMapping
-//	public String bookAppointment(@RequestBody AppointmentRequest request) {
-//
-//		return appointmentService.bookAppointment(request);
-//	}
+	@PostMapping
+	public String bookAppointment(@RequestBody AppointmentRequest request) {
+
+		return appointmentService.bookAppointment(request);
+	}
 
 	@GetMapping
 	public List<Appointment> getAppointments() {
@@ -47,4 +47,9 @@ public class AppointmentController {
 		return appointmentService.cancelAppointment(id);
 	}
 
+	@PutMapping("/confirm/{id}")
+	public String confirmAppointment(@PathVariable Long id) {
+
+		return appointmentService.confirmAppointment(id);
+	}
 }
