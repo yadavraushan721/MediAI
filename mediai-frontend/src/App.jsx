@@ -26,6 +26,12 @@ import AdminAppointmentsPage from "./pages/admin/AdminAppointmentsPage";
 const App = () => {
   return (
     <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<HomePage />} />
+
+      <Route path="/login" element={<LoginPage />} />
+
+      <Route path="/register" element={<RegisterPage />} />
       {/* Auth Routes */}
       <Route
         path="/admin"
