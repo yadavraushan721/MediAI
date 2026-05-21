@@ -39,4 +39,11 @@ public class AppointmentController {
 
         return appointmentService.cancelAppointment(id);
     }
+    
+ // Admin Get All Appointments
+    @GetMapping("/admin/appointments")
+    public List<Appointment> getAllAppointmentsForAdmin() {
+
+        return appointmentService.getAllAppointments();
+    }
 }

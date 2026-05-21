@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getAppointments } from "../../services/appointmentService";
+import { getAllAppointmentsForAdmin } from "../../services/appointmentService";
 
 const AdminAppointmentsPage = () => {
   const [appointments, setAppointments] = useState([]);
@@ -11,7 +11,7 @@ const AdminAppointmentsPage = () => {
 
   const fetchAppointments = async () => {
     try {
-      const data = await getAppointments();
+      const data = await getAllAppointmentsForAdmin();
 
       setAppointments(data);
     } catch (error) {

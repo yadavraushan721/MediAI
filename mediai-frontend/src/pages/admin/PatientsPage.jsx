@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getPatients } from "../../services/patientService";
+import { getAllAppointmentsForAdmin } from "../../services/patientService";
 
 const PatientsPage = () => {
   const [patients, setPatients] = useState([]);
@@ -11,7 +11,7 @@ const PatientsPage = () => {
 
   const fetchPatients = async () => {
     try {
-      const data = await getPatients();
+      const data = await getAllAppointmentsForAdmin();
 
       setPatients(data);
     } catch (error) {

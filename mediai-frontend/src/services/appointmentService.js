@@ -1,5 +1,7 @@
 import axiosInstance from "../api/axiosInstance";
 
+// ================= PATIENT =================
+
 // Patient Book Appointment
 export const bookAppointment = async (appointmentData) => {
   const response = await axiosInstance.post(
@@ -10,12 +12,23 @@ export const bookAppointment = async (appointmentData) => {
   return response.data;
 };
 
-// Patient Get Appointments
+// Patient Get Own Appointments
 export const getAppointments = async () => {
   const response = await axiosInstance.get("/api/patient/appointments");
 
   return response.data;
 };
+
+// ================= ADMIN =================
+
+// Admin Get All Appointments
+export const getAllAppointmentsForAdmin = async () => {
+  const response = await axiosInstance.get("/api/admin/appointments");
+
+  return response.data;
+};
+
+// ================= DOCTOR =================
 
 // Doctor Confirm Appointment
 export const confirmAppointment = async (id) => {
