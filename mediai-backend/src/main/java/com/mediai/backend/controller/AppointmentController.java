@@ -17,37 +17,42 @@ import com.mediai.backend.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/patient/appointments")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AppointmentController {
 
 	private final AppointmentService appointmentService;
 
-	@PostMapping
+    // Patient Book Appointment
+	@PostMapping("/patient/appointments")
 	public String bookAppointment(@RequestBody AppointmentRequest request) {
 
 		return appointmentService.bookAppointment(request);
 	}
-
-	@GetMapping
+	
+	// Get All Appointments
+	@GetMapping("/patient/appointments")
 	public List<Appointment> getAppointments() {
 
 		return appointmentService.getAllAppointments();
 	}
-
-	@PutMapping("/complete/{id}")
+	
+	// Doctor Confirm Appointment
+	@PutMapping("/doctor/appointments/confirm/{id}")
 	public String completeAppointment(@PathVariable Long id) {
 
 		return appointmentService.completeAppointment(id);
 	}
 
-	@PutMapping("/cancel/{id}")
+	// Patient Cancel Appointment
+	@PutMapping("/patient/appointments/cancel/{id}")
 	public String cancelAppointment(@PathVariable Long id) {
 
 		return appointmentService.cancelAppointment(id);
 	}
 
-	@PutMapping("/confirm/{id}")
+	// Doctor Complete Appointment
+	@PutMapping("/doctor/appointments/complete/{id}")
 	public String confirmAppointment(@PathVariable Long id) {
 
 		return appointmentService.confirmAppointment(id);
