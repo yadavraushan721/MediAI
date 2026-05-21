@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import { loginUser } from "../../services/authService";
 
+import { toast } from "react-toastify"; // 
+
 const LoginPage = () => {
   //It helps move user from one page to another.
   // In this case, after a successful login, we want to navigate the user to their respective dashboard based on their role (admin, doctor, or patient). The useNavigate hook provides us with a navigate function that we can call to change the route programmatically.
@@ -26,34 +28,31 @@ const LoginPage = () => {
   /* Runs when form submits
   Why async ? :Because API calls take time.*/
   const handleLogin = async (e) => {
-    e.preventDefault(); // This stops reload.
+    e.preventDefault();
 
     try {
-      const response = await loginUser(formData); // api call to backend with form data. It returns response which contains token, role, and email.
+      const response = await loginUser(formData);
 
-      //   localStorage.setItem("token", response);
+    //   console.log(response);
 
-      localStorage.setItem("token", response.token); // Saves JWT token in browser storage for later use in authenticated API requests.
+      toast.success("Login Successful");
 
+      localStorage.setItem("token", response.token);
       localStorage.setItem("role", response.role);
-
       localStorage.setItem("email", response.email);
 
-      console.log(response);
-
-      alert("Login Successful");
-
+      // Redirect based on role
       if (response.role === "ADMIN") {
-        navigate("/admin/dashboard"); // Navigates to admin dashboard if user is an admin.
+        navigate("/admin/dashboard");
       } else if (response.role === "DOCTOR") {
-        navigate("/doctor/dashboard"); // Navigates to doctor dashboard if user is a doctor.
+        navigate("/doctor/dashboard");
       } else if (response.role === "PATIENT") {
-        navigate("/patient/dashboard"); // Navigates to patient dashboard if user is a patient.
+        navigate("/patient/dashboard");
       }
     } catch (error) {
       console.error(error);
 
-      alert("Invalid Credentials");
+      toast.error(error.response?.data?.message || "Invalid Credentials");
     }
   };
 

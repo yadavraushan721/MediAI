@@ -86,9 +86,9 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="w-64 bg-blue-700 text-white p-5">
+      <div className="w-64 bg-gradient-to-b from-blue-700 to-indigo-900 text-white p-5">
         <h1 className="text-3xl font-bold mb-10">MediAI</h1>
 
         <ul className="space-y-4">
@@ -97,8 +97,8 @@ const DashboardLayout = () => {
               key={item.name}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 p-3 rounded-lg transition 
-                ${isActive ? "bg-blue-900" : "hover:bg-blue-800"}`
+                `flex items-center gap-3 p-3 rounded-xl transition-all duration-300 hover:translate-x-1
+  ${isActive ? "bg-blue-900" : "hover:bg-blue-800"}`
               }
             >
               {item.icon}
@@ -117,6 +117,10 @@ const DashboardLayout = () => {
             <h2 className="text-2xl font-semibold">Dashboard</h2>
 
             <p className="text-gray-500 text-sm">{email}</p>
+
+            <span className="inline-block mt-1 bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full">
+              {role}
+            </span>
           </div>
 
           <button

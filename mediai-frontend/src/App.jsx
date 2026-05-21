@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 
+import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
@@ -20,9 +22,9 @@ const App = () => {
   return (
     <Routes>
       {/* Auth Routes */}
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<HomePage />} />{" "}
       <Route path="/login" element={<LoginPage />} />
-
+      <Route path="/register" element={<RegisterPage />} />
       {/* Admin Routes */}
       <Route
         path="/admin"
@@ -36,7 +38,6 @@ const App = () => {
 
         <Route path="doctors" element={<DoctorsPage />} />
       </Route>
-
       {/* Doctor Routes */}
       <Route
         path="/doctor"
@@ -50,7 +51,6 @@ const App = () => {
         <Route path="appointments" element={<DoctorAppointmentsPage />} />
         <Route path="medical-records" element={<MedicalRecordsPage />} />
       </Route>
-
       {/* Patient Routes */}
       <Route
         path="/patient"
