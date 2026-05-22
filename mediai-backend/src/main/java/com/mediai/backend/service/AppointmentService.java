@@ -27,9 +27,21 @@ public class AppointmentService {
 		Doctor doctor = doctorRepository.findById(request.getDoctorId())
 				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
 
-		Appointment appointment = Appointment.builder().patientName(request.getPatientName()).doctor(doctor)
-				.appointmentDate(request.getAppointmentDate()).appointmentTime(request.getAppointmentTime())
-				.status(AppointmentStatus.PENDING).build();
+		Appointment appointment = Appointment.builder()
+
+				.patientName(request.getPatientName())
+
+				.patientEmail(request.getPatientEmail())
+
+				.doctor(doctor)
+
+				.appointmentDate(request.getAppointmentDate())
+
+				.appointmentTime(request.getAppointmentTime())
+
+				.status(AppointmentStatus.PENDING)
+
+				.build();
 
 		appointmentRepository.save(appointment);
 
@@ -39,6 +51,11 @@ public class AppointmentService {
 	public List<Appointment> getAllAppointments() {
 
 		return appointmentRepository.findAll();
+	}
+
+	public List<Appointment> getPatientAppointments(String patientEmail) {
+
+		return appointmentRepository.findByPatientEmail(patientEmail);
 	}
 
 	public String cancelAppointment(Long id) {

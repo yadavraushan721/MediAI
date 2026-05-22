@@ -16,6 +16,8 @@ const AppointmentsPage = () => {
   const [formData, setFormData] = useState({
     patientName: "",
 
+    patientEmail: localStorage.getItem("email"),
+
     doctorId: "",
 
     appointmentDate: "",
@@ -61,12 +63,19 @@ const AppointmentsPage = () => {
     e.preventDefault();
 
     try {
-      await bookAppointment(formData);
+      //   await bookAppointment(formData);
+      await bookAppointment({
+        ...formData,
+
+        patientEmail: localStorage.getItem("email"),
+      });
 
       alert("Appointment Booked Successfully");
 
       setFormData({
         patientName: "",
+
+        patientEmail: localStorage.getItem("email"),
 
         doctorId: "",
 

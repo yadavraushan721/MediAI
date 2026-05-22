@@ -9,7 +9,10 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AppointmentRequest {
+
 	private String patientName;
+
+	private String patientEmail;
 
 	private Long doctorId;
 

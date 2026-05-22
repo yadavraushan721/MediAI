@@ -2,7 +2,14 @@ package com.mediai.backend.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.mediai.backend.dto.AppointmentRequest;
 import com.mediai.backend.entity.Appointment;
@@ -25,13 +32,23 @@ public class AppointmentController {
         return appointmentService.bookAppointment(request);
     }
 
-    // Patient Get Appointments
+//    // Patient Get Appointments
+//    @GetMapping("/patient/appointments")
+//    public List<Appointment> getAppointments() {
+//
+//        return appointmentService.getAllAppointments();
+//    }
+
     @GetMapping("/patient/appointments")
-    public List<Appointment> getAppointments() {
+    public List<Appointment> getAppointments(
+            Authentication authentication) {
 
-        return appointmentService.getAllAppointments();
+        String email = authentication.getName();
+
+        return appointmentService
+                .getPatientAppointments(email);
     }
-
+    
     // Patient Cancel Appointment
     @PutMapping("/patient/appointments/cancel/{id}")
     public String cancelAppointment(
