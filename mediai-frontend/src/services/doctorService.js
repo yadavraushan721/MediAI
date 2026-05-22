@@ -55,3 +55,21 @@ export const getPublicDoctors = async () => {
 
   return response.data;
 };
+
+// Get Pending Doctors
+export const getPendingDoctors = async () => {
+  const response = await axiosInstance.get(
+    "/api/admin/doctors/pending-doctors",
+  );
+
+  return response.data;
+};
+
+// Approve Doctor
+export const approveDoctor = async (id) => {
+  const response = await axiosInstance.put(
+    `/api/admin/doctors/approve-doctor/${id}`,
+  );
+
+  return response.data;
+};

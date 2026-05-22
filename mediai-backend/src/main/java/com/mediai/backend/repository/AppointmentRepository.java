@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.mediai.backend.entity.Appointment;
 import com.mediai.backend.entity.AppointmentStatus;
 
-public interface AppointmentRepository
-        extends JpaRepository<Appointment, Long> {
+public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    long countByStatus(AppointmentStatus status);
+	long countByStatus(AppointmentStatus status);
 
-    List<Appointment> findByPatientEmail(
-            String patientEmail);
+	List<Appointment> findByPatientEmail(String patientEmail);
+
+	List<Appointment> findByDoctorEmail(String email);
 }

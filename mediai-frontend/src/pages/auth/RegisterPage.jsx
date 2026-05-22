@@ -25,8 +25,11 @@ const RegisterPage = () => {
     try {
       const response = await registerUser(formData);
 
-      alert(response.message || "Registration Successful");
-
+      if (formData.role === "DOCTOR") {
+        alert("Doctor Registration Submitted.\nWait for Admin Approval.");
+      } else {
+        alert(response.message || "Registration Successful");
+      }
       navigate("/login");
     } catch (error) {
       console.error(error);

@@ -2,7 +2,12 @@ package com.mediai.backend.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.mediai.backend.entity.Appointment;
 import com.mediai.backend.service.AppointmentService;
@@ -17,10 +22,21 @@ public class DoctorAppointmentController {
     private final AppointmentService appointmentService;
 
     // Doctor Get Appointments
+//    @GetMapping
+//    public List<Appointment> getAppointments() {
+//
+//        return appointmentService.getAllAppointments();
+//    }
+    
+    
     @GetMapping
-    public List<Appointment> getAppointments() {
+    public List<Appointment> getAppointments(
+            Authentication authentication) {
 
-        return appointmentService.getAllAppointments();
+        String email = authentication.getName();
+
+        return appointmentService
+                .getDoctorAppointments(email);
     }
 
     // Doctor Confirm Appointment

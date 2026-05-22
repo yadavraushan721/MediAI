@@ -12,6 +12,9 @@ public class DoctorRequest {
 
 	@NotBlank
 	private String fullName;
+	
+	@NotBlank
+	private String email;
 
 	@NotBlank
 	private String specialization;

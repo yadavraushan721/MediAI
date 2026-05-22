@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mediai.backend.dto.DoctorRequest;
 import com.mediai.backend.entity.Doctor;
+import com.mediai.backend.entity.User;
 import com.mediai.backend.service.DoctorService;
 
 import jakarta.validation.Valid;
@@ -68,5 +69,18 @@ public class DoctorManagementController {
 	public Page<Doctor> getDoctorsWithPagination(@RequestParam int page, @RequestParam int size) {
 
 		return doctorService.getDoctorsWithPagination(page, size);
+	}
+
+	@GetMapping("/pending-doctors")
+	public List<User> getPendingDoctors() {
+
+		return doctorService.getPendingDoctors();
+	}
+	
+	@PutMapping("/approve-doctor/{id}")
+	public String approveDoctor(
+	        @PathVariable Long id) {
+
+	    return doctorService.approveDoctor(id);
 	}
 }

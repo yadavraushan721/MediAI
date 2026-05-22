@@ -95,4 +95,9 @@ public class AppointmentService {
 		return "Appointment confirmed successfully";
 	}
 
+	public List<Appointment> getDoctorAppointments(String email) {
+
+		return appointmentRepository.findByDoctorEmail(email);
+	}
+
 }

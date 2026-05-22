@@ -27,6 +27,9 @@ public class Doctor {
 
 	private String fullName; // doctor name
 
+	@Column(unique = true)
+	private String email;
+
 	@Column(nullable = false)
 	private String specialization; // Cardiology/ Dentist,etc
 
@@ -35,8 +38,8 @@ public class Doctor {
 	private String qualification; // MBBS, MD
 
 	private String availableDays; // Mon - Fri
-	
-    private double consultationFee; // Doctor fees
 
-    private boolean available; // Available for appointments
+	private double consultationFee; // Doctor fees
+
+	private boolean available; // Available for appointments
 }

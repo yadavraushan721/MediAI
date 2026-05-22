@@ -20,7 +20,7 @@ public class AuthService {
 	private final BCryptPasswordEncoder passwordEncoder; // @Bean se create hua h
 
 	private final JwtService jwtService;
-	
+
 //	public AuthService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
 //		this.userRepository = userRepository;
 //		this.passwordEncoder = passwordEncoder;
@@ -34,17 +34,17 @@ public class AuthService {
 	 * </p>
 	 *
 	 * <ul>
-	 *     <li>Checks whether the email already exists in the database.</li>
-	 *     <li>Encodes the user's password using BCrypt for security.</li>
-	 *     <li>Creates a User entity using the Builder Pattern.</li>
-	 *     <li>Saves the user into the database using JPA Repository.</li>
+	 * <li>Checks whether the email already exists in the database.</li>
+	 * <li>Encodes the user's password using BCrypt for security.</li>
+	 * <li>Creates a User entity using the Builder Pattern.</li>
+	 * <li>Saves the user into the database using JPA Repository.</li>
 	 * </ul>
 	 *
-	 * @param request contains user registration details such as
-	 *                fullName, email, password, and role.
+	 * @param request contains user registration details such as fullName, email,
+	 *                password, and role.
 	 *
-	 * @return success message if registration is completed,
-	 *         otherwise returns "Email already exists".
+	 * @return success message if registration is completed, otherwise returns
+	 *         "Email already exists".
 	 */
 
 	public String register(RegisterRequest request) {
@@ -52,7 +52,7 @@ public class AuthService {
 		if (userRepository.findByEmail(request.getEmail()).isPresent()) {
 			return "Email already exists";
 		}
-		
+
 //		User user = new User();
 //
 //		user.setFullName(request.getFullName());
@@ -61,33 +61,41 @@ public class AuthService {
 //		user.setRole(request.getRole());
 
 		User user = User.builder()
+
 				.fullName(request.getFullName())
+
 				.email(request.getEmail())
-				.password(passwordEncoder
-				.encode(request.getPassword()))
+
+				.password(passwordEncoder.encode(request.getPassword()))
+
 				.role(request.getRole())
-				.build(); // final User Object create
+
+				.active(request.getRole().name().equals("DOCTOR") ? false : true).build();
 
 		userRepository.save(user);
 
 		return "User registered successfully";
 	}
-	
+
 	public AuthResponse login(LoginRequest request) {
 
-	    User user = userRepository.findByEmail(request.getEmail())
-	            .orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findByEmail(request.getEmail())
+				.orElseThrow(() -> new RuntimeException("User not found"));
 
-	    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-	        throw new RuntimeException("Invalid password");
-	    }
+		// CHECK APPROVAL
+		if (!user.isActive()) {
 
-	    String token = jwtService.generateToken(user.getEmail());
+			throw new RuntimeException("Your account is waiting for admin approval");
+		}
 
-	    return new AuthResponse(
-	            token,
-	            user.getRole().name(),
-	            user.getEmail()
-	    );
+		// PASSWORD CHECK
+		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+
+			throw new RuntimeException("Invalid password");
+		}
+
+		String token = jwtService.generateToken(user.getEmail());
+
+		return new AuthResponse(token, user.getRole().name(), user.getEmail());
 	}
 }

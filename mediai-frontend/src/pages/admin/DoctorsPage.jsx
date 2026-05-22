@@ -7,6 +7,8 @@ import {
   updateDoctor,
   searchDoctors,
   getDoctorsPagination,
+  getPendingDoctors,
+  approveDoctor,
 } from "../../services/doctorService";
 
 const DoctorsPage = () => {
@@ -26,8 +28,12 @@ const DoctorsPage = () => {
 
   const [totalPages, setTotalPages] = useState(0);
 
+  const [pendingDoctors, setPendingDoctors] = useState([]);
+
   const [doctorData, setDoctorData] = useState({
     fullName: "",
+
+    email: "",
 
     specialization: "",
 
@@ -44,6 +50,8 @@ const DoctorsPage = () => {
 
   useEffect(() => {
     fetchDoctors();
+
+    fetchPendingDoctors();
   }, []);
 
   const fetchDoctors = async (page = 0) => {
@@ -62,6 +70,16 @@ const DoctorsPage = () => {
     }
   };
 
+  const fetchPendingDoctors = async () => {
+    try {
+      const data = await getPendingDoctors();
+
+      setPendingDoctors(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // Delete Doctor
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
@@ -72,6 +90,21 @@ const DoctorsPage = () => {
       await deleteDoctor(id);
 
       alert("Doctor Deleted Successfully");
+
+      fetchDoctors();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleApproveDoctor = async (id) => {
+    try {
+      await approveDoctor(id);
+
+      alert("Doctor Approved Successfully");
+
+      // REFRESH BOTH TABLES
+      fetchPendingDoctors();
 
       fetchDoctors();
     } catch (error) {
@@ -102,7 +135,7 @@ const DoctorsPage = () => {
       } else {
         await addDoctor(doctorData);
 
-        alert("Doctor Added Successfully");
+        alert("Doctor Added Successfully\n\nDefault Password: 12345");
       }
 
       setShowModal(false);
@@ -115,6 +148,8 @@ const DoctorsPage = () => {
 
       setDoctorData({
         fullName: "",
+
+        email: "",
 
         specialization: "",
 
@@ -141,6 +176,8 @@ const DoctorsPage = () => {
     setDoctorData({
       fullName: "",
 
+      email: "",
+
       specialization: "",
 
       experience: "",
@@ -163,6 +200,8 @@ const DoctorsPage = () => {
 
     setDoctorData({
       fullName: doctor.fullName,
+
+      email: doctor.email,
 
       specialization: doctor.specialization,
 
@@ -195,7 +234,7 @@ const DoctorsPage = () => {
       console.error(error);
     }
   };
-  
+
   if (loading) {
     return <div className="text-2xl font-semibold">Loading Doctors...</div>;
   }
@@ -233,12 +272,63 @@ const DoctorsPage = () => {
           </button>
         </div>
       </div>
+
+      {/* Pending Doctors Approval */}
+      <div className="bg-white rounded-2xl shadow p-6 mb-8">
+        <h2 className="text-2xl font-bold mb-4">Pending Doctors Approval</h2>
+
+        {pendingDoctors.length === 0 ? (
+          <p className="text-gray-500">No Pending Doctors</p>
+        ) : (
+          <table className="w-full">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="p-4 text-left">Name</th>
+
+                <th className="p-4 text-left">Email</th>
+
+                <th className="p-4 text-left">Status</th>
+
+                <th className="p-4 text-left">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {pendingDoctors.map((doctor) => (
+                <tr key={doctor.id} className="border-t">
+                  <td className="p-4">{doctor.fullName}</td>
+
+                  <td className="p-4">{doctor.email}</td>
+
+                  <td className="p-4">
+                    <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">
+                      Pending
+                    </span>
+                  </td>
+
+                  <td className="p-4">
+                    <button
+                      onClick={() => handleApproveDoctor(doctor.id)}
+                      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+                    >
+                      Approve
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
       <div className="bg-white rounded-2xl shadow overflow-x-auto">
         {/* table data */}
         <table className="w-full">
           <thead className="bg-gray-100">
             <tr>
               <th className="p-4 text-left">Name</th>
+
+              <th className="p-4 text-left">Email</th>
 
               <th className="p-4 text-left">Specialization</th>
 
@@ -256,6 +346,8 @@ const DoctorsPage = () => {
             {doctors.map((doctor) => (
               <tr key={doctor.id} className="border-t">
                 <td className="p-4">{doctor.fullName}</td>
+
+                <td className="p-4">{doctor.email}</td>
 
                 <td className="p-4">{doctor.specialization}</td>
 
@@ -316,10 +408,10 @@ const DoctorsPage = () => {
       </div>
       {/* Add Doctor Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-          <div className="bg-white w-full max-w-2xl rounded-2xl p-8">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-3xl font-bold text-gray-800">
                 {editMode ? "Edit Doctor" : "Add Doctor"}
               </h2>
               <button
@@ -328,7 +420,7 @@ const DoctorsPage = () => {
 
                   resetForm();
                 }}
-                className="text-red-500 text-xl"
+                className="w-8 h-8 rounded-full hover:bg-red-100 text-red-500 flex items-center justify-center transition"
               >
                 ✕
               </button>
@@ -336,13 +428,23 @@ const DoctorsPage = () => {
 
             <form
               onSubmit={handleAddDoctor}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              className="grid grid-cols-1 md:grid-cols-2 gap-5"
             >
               <input
                 type="text"
                 name="fullName"
                 placeholder="Full Name"
                 value={doctorData.fullName}
+                onChange={handleChange}
+                className="border p-3 rounded-lg"
+                required
+              />
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Doctor Email"
+                value={doctorData.email}
                 onChange={handleChange}
                 className="border p-3 rounded-lg"
                 required
@@ -398,15 +500,16 @@ const DoctorsPage = () => {
                 required
               />
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 mt-2">
                 <input
                   type="checkbox"
                   name="available"
                   checked={doctorData.available}
                   onChange={handleChange}
+                  className="w-4 h-4 accent-blue-600"
                 />
 
-                <label>Available</label>
+                <label className="font-medium text-gray-700">Available</label>
               </div>
 
               <button
