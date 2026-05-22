@@ -1,5 +1,25 @@
 import { useEffect, useState } from "react";
 
+import {
+  FaUserMd,
+  FaCalendarCheck,
+  FaClock,
+  FaCheckCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+
 import { getAdminDashboardData } from "../../services/dashboardService";
 
 const AdminDashboard = () => {
@@ -15,8 +35,6 @@ const AdminDashboard = () => {
     try {
       const data = await getAdminDashboardData();
 
-      console.log(data);
-
       setDashboardData(data);
     } catch (error) {
       console.error(error);
@@ -26,65 +44,190 @@ const AdminDashboard = () => {
   };
 
   if (loading) {
-    return <div className="text-2xl font-semibold">Loading Dashboard...</div>;
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <div className="text-3xl font-bold text-blue-600 animate-pulse">
+          Loading Dashboard...
+        </div>
+      </div>
+    );
   }
+
+  const cards = [
+    {
+      title: "Total Doctors",
+      value: dashboardData?.totalDoctors,
+      icon: <FaUserMd />,
+      color: "from-blue-500 to-indigo-600",
+    },
+
+    {
+      title: "Total Appointments",
+      value: dashboardData?.totalAppointments,
+      icon: <FaCalendarCheck />,
+      color: "from-green-500 to-emerald-600",
+    },
+
+    {
+      title: "Pending Appointments",
+      value: dashboardData?.pendingAppointments,
+      icon: <FaClock />,
+      color: "from-yellow-400 to-orange-500",
+    },
+
+    {
+      title: "Completed Appointments",
+      value: dashboardData?.completedAppointments,
+      icon: <FaCheckCircle />,
+      color: "from-teal-500 to-cyan-600",
+    },
+
+    {
+      title: "Cancelled Appointments",
+      value: dashboardData?.cancelledAppointments,
+      icon: <FaTimesCircle />,
+      color: "from-red-500 to-pink-600",
+    },
+  ];
+
+  const appointmentData = [
+    {
+      name: "Pending",
+      value: dashboardData?.pendingAppointments,
+    },
+
+    {
+      name: "Completed",
+      value: dashboardData?.completedAppointments,
+    },
+
+    {
+      name: "Cancelled",
+      value: dashboardData?.cancelledAppointments,
+    },
+  ];
+
+  const COLORS = ["#facc15", "#14b8a6", "#ef4444"];
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-gray-800">Admin Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Total Doctors */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-          <h2 className="text-lg font-semibold text-gray-600">Total Doctors</h2>
+        <p className="text-gray-500 mt-2">
+          Welcome back! Here's your healthcare system overview.
+        </p>
+      </div>
 
-          <p className="text-4xl font-bold text-blue-600 mt-4">
-            {dashboardData?.totalDoctors}
-          </p>
-        </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        {cards.map((card, index) => (
+          <div
+            key={index}
+            className={`bg-gradient-to-r ${card.color}
+            text-white rounded-3xl shadow-lg p-6
+            hover:scale-105 transition-all duration-300`}
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-lg font-medium opacity-90">{card.title}</h2>
 
-        {/* Total Appointments */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-          <h2 className="text-lg font-semibold text-gray-600">
-            Total Appointments
+                <p className="text-5xl font-bold mt-4">{card.value}</p>
+              </div>
+
+              <div className="text-5xl opacity-80">{card.icon}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* System Overview */}
+      <div className="mt-10 bg-white rounded-3xl shadow p-8">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">
+          System Overview
+        </h2>
+
+        <p className="text-gray-600 leading-7">
+          MediAI healthcare management system is actively managing doctors,
+          appointments, and patient workflows efficiently. Monitor appointment
+          statuses and healthcare operations in real-time through this
+          dashboard.
+        </p>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+        {/* Bar Chart */}
+        <div className="bg-white rounded-3xl shadow p-6">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            Appointment Analytics
           </h2>
 
-          <p className="text-4xl font-bold text-green-600 mt-4">
-            {dashboardData?.totalAppointments}
-          </p>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={appointmentData}>
+              <XAxis dataKey="name" />
+
+              <YAxis />
+
+              <Tooltip />
+
+              <Bar dataKey="value" fill="#3b82f6" radius={[10, 10, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
 
-        {/* Pending */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-          <h2 className="text-lg font-semibold text-gray-600">
-            Pending Appointments
+        {/* Pie Chart */}
+        <div className="bg-white rounded-3xl shadow p-6">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            Appointment Status
           </h2>
 
-          <p className="text-4xl font-bold text-yellow-500 mt-4">
-            {dashboardData.pendingAppointments}
-          </p>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={appointmentData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={100}
+                label={({ name, percent }) =>
+                  `${name} ${(percent * 100).toFixed(0)}%`
+                }
+              >
+                {appointmentData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
+      </div>
 
-        {/* Completed */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-          <h2 className="text-lg font-semibold text-gray-600">
-            Completed Appointments
-          </h2>
+      {/* Recent Activity */}
+      <div className="mt-10 bg-white rounded-3xl shadow p-6">
+        <h2 className="text-2xl font-bold mb-6">Recent Activity</h2>
 
-          <p className="text-4xl font-bold text-green-500 mt-4">
-            {dashboardData?.completedAppointments}
-          </p>
-        </div>
+        <div className="space-y-4">
+          <div className="flex justify-between border-b pb-3">
+            <p>New appointment booked</p>
 
-        {/* Cancelled */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-          <h2 className="text-lg font-semibold text-gray-600">
-            Cancelled Appointments
-          </h2>
+            <span className="text-gray-400 text-sm">Just now</span>
+          </div>
 
-          <p className="text-4xl font-bold text-red-500 mt-4">
-            {dashboardData?.cancelledAppointments}
-          </p>
+          <div className="flex justify-between border-b pb-3">
+            <p>Doctor profile updated</p>
+
+            <span className="text-gray-400 text-sm">2 hrs ago</span>
+          </div>
+
+          <div className="flex justify-between">
+            <p>Appointment completed</p>
+
+            <span className="text-gray-400 text-sm">Today</span>
+          </div>
         </div>
       </div>
     </div>

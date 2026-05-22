@@ -81,7 +81,7 @@ const RegisterPage = () => {
 
             <option value="DOCTOR">Doctor</option>
 
-            <option value="ADMIN">Admin</option>
+            {/* <option value="ADMIN">Admin</option> */}
           </select>
 
           <button

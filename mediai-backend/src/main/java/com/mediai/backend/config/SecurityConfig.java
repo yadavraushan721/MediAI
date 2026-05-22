@@ -69,15 +69,17 @@ public class SecurityConfig {
 
 		http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-	    .csrf(csrf -> csrf.disable())
+				.csrf(csrf -> csrf.disable())
 
-	    .sessionManagement(session ->
-	        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	    )
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
 				.authorizeHttpRequests(auth -> auth
 
-						.requestMatchers("/api/auth/**").permitAll().requestMatchers("/api/public/**").permitAll()
+						.requestMatchers("/api/auth/**").permitAll()
+
+						.requestMatchers("/api/public/**").permitAll()
+
+						.requestMatchers("/api/profile/**").hasAnyAuthority("ADMIN", "DOCTOR", "PATIENT")
 
 						.requestMatchers("/api/admin/**").hasAuthority("ADMIN")
 
@@ -92,35 +94,24 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 
-	    CorsConfiguration configuration = new CorsConfiguration();
+		CorsConfiguration configuration = new CorsConfiguration();
 
-	    configuration.setAllowedOrigins(List.of(
-	            "http://localhost:5173",
-	            "https://medi-ai-dun.vercel.app"
-	    ));
+		configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://medi-ai-dun.vercel.app"));
 
-	    configuration.setAllowedMethods(List.of(
-	            "GET",
-	            "POST",
-	            "PUT",
-	            "DELETE",
-	            "OPTIONS"
-	    ));
+		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-	    configuration.setAllowedHeaders(List.of("*"));
+		configuration.setAllowedHeaders(List.of("*"));
 
-	    configuration.setAllowCredentials(true);
+		configuration.setAllowCredentials(true);
 
-	    UrlBasedCorsConfigurationSource source =
-	            new UrlBasedCorsConfigurationSource();
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-	    source.registerCorsConfiguration("/**", configuration);
+		source.registerCorsConfiguration("/**", configuration);
 
-	    return source;
+		return source;
 	}
 
 }

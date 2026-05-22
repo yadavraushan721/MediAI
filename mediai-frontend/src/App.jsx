@@ -4,6 +4,10 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 
+import AdminProfilePage from "./pages/admin/AdminProfilePage";
+import DoctorProfilePage from "./pages/doctor/DoctorProfilePage";
+import PatientProfilePage from "./pages/patient/PatientProfilePage";
+
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
 import PatientDashboard from "./pages/patient/PatientDashboard";
@@ -32,7 +36,8 @@ const App = () => {
       <Route path="/login" element={<LoginPage />} />
 
       <Route path="/register" element={<RegisterPage />} />
-      {/* Auth Routes */}
+
+      {/* Admin Routes */}
       <Route
         path="/admin"
         element={
@@ -48,6 +53,8 @@ const App = () => {
         <Route path="patients" element={<PatientsPage />} />
 
         <Route path="appointments" element={<AdminAppointmentsPage />} />
+
+        <Route path="profile" element={<AdminProfilePage />} />
       </Route>
 
       {/* Doctor Routes */}
@@ -62,6 +69,7 @@ const App = () => {
         <Route path="dashboard" element={<DoctorDashboard />} />
         <Route path="appointments" element={<DoctorAppointmentsPage />} />
         <Route path="medical-records" element={<MedicalRecordsPage />} />
+        <Route path="profile" element={<DoctorProfilePage />} />
       </Route>
 
       {/* Patient Routes */}
@@ -78,6 +86,8 @@ const App = () => {
         <Route path="appointments" element={<AppointmentsPage />} />
 
         <Route path="medical-history" element={<PatientMedicalHistoryPage />} />
+
+        <Route path="profile" element={<PatientProfilePage />} />
       </Route>
     </Routes>
   );

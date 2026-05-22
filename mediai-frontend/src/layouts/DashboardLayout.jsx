@@ -6,6 +6,7 @@ import {
   FaCalendarCheck,
   FaTachometerAlt,
   FaNotesMedical,
+  FaUserCircle,
 } from "react-icons/fa";
 
 const DashboardLayout = () => {
@@ -27,6 +28,11 @@ const DashboardLayout = () => {
   const menuItems = {
     ADMIN: [
       {
+        name: "Profile",
+        path: "/admin/profile",
+        icon: <FaUserCircle />,
+      },
+      {
         name: "Dashboard",
         path: "/admin/dashboard",
         icon: <FaTachometerAlt />,
@@ -46,9 +52,19 @@ const DashboardLayout = () => {
         path: "/admin/appointments",
         icon: <FaCalendarCheck />,
       },
+      {
+        name: "Profile",
+        path: "/admin/profile",
+        icon: <FaUserCircle />,
+      },
     ],
 
     DOCTOR: [
+      {
+        name: "Profile",
+        path: "/doctor/profile",
+        icon: <FaUserCircle />,
+      },
       {
         name: "Dashboard",
         path: "/doctor/dashboard",
@@ -67,6 +83,11 @@ const DashboardLayout = () => {
     ],
 
     PATIENT: [
+      {
+        name: "Profile",
+        path: "/patient/profile",
+        icon: <FaUserCircle />,
+      },
       {
         name: "Dashboard",
         path: "/patient/dashboard",
