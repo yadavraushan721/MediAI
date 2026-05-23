@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { loginUser } from "../../services/authService";
 
-import { toast } from "react-toastify"; // 
+import { toast } from "react-toastify"; //
 
 const LoginPage = () => {
   //It helps move user from one page to another.
@@ -33,7 +33,7 @@ const LoginPage = () => {
     try {
       const response = await loginUser(formData);
 
-    //   console.log(response);
+      //   console.log(response);
 
       toast.success("Login Successful");
 
@@ -52,7 +52,7 @@ const LoginPage = () => {
     } catch (error) {
       console.error(error);
 
-      toast.error(error.response?.data?.message || "Invalid Credentials");
+      toast.error(error.response?.data || "Invalid Credentials");
     }
   };
 
@@ -89,6 +89,15 @@ const LoginPage = () => {
             Login
           </button>
         </form>
+
+        <p className="text-center mt-4">
+          {" "}
+          If you are new user please ?{" "}
+          <Link to="/register" className="text-blue-700 font-semibold">
+            {" "}
+            Register{" "}
+          </Link>{" "}
+        </p>
       </div>
     </div>
   );
